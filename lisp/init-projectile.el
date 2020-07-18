@@ -2,7 +2,7 @@
 (require-package 'projectile)
 (require-package 'counsel-projectile)
 
-(setq projectile-project-search-path '("~/projects/" "~/git/"))
+(setq projectile-project-search-path '("~/git/"))
 (setq projectile-completion-system 'ivy)
 
 (projectile-mode)
