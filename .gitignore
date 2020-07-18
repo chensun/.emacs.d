@@ -1,0 +1,15 @@
+/.cache
+/.emacs.desktop
+/.recentf
+/ac-comphist.dat
+/auto-save-list
+/bookmarks
+/elpa
+/eshell
+/projectile-bookmarks.eld
+/recentf
+/session.*
+/transient
+/url
+# exclude Google-specific config
+/lisp/init-google.el

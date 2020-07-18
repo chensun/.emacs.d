@@ -1,0 +1,33 @@
+;;; init-ui.el
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+(global-linum-mode 1)
+
+;; (show-paren-mode 1)
+(add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
+
+(define-advice show-paren-function (:around (fn) fix-show-paren-function)
+  "Highlight enclosing parens"
+  (cond ((looking-at-p "\\s(") (funcall fn))
+         (t (save-excursion
+              (ignore-errors (backward-up-list))
+              (funcall fn)))))
+
+
+(setq inhibit-splash-screen t)
+(setq initial-frame-alist (quote ((fullscreen . maximized))))
+(setq-default cursor-type 'bar)
+
+;; font size
+;; (set-face-attribute 'default nil :height 100)
+(set-face-attribute 'default nil :font "DejaVu Sans Mono 10")
+
+;; (require-package 'monokai-theme)
+;; (load-theme 'monokai t)
+
+(require-package 'spacemacs-theme)
+(load-theme 'spacemacs-dark t)
+
+(provide 'init-ui)
+;;; init-ui.el ends here
