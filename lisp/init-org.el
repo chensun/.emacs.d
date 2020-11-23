@@ -1,6 +1,7 @@
 ;;; init-org.el
 (require 'org)
 (require 'ob-shell)
+(require 'org-tempo)
 
 (require-package 'htmlize)
 
