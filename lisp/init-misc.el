@@ -1,6 +1,8 @@
 ;;; init-misc.el
 (setenv "BASH_ENV" (expand-file-name "~/.bashrc"))
 
+(setq-default indent-tabs-mode nil)
+
 (setq ring-bell-function 'ignore)
 
 (global-auto-revert-mode t)
