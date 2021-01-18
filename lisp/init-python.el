@@ -12,26 +12,17 @@
   (eval-after-load "company"
     '(add-to-list 'company-backends '(company-anaconda :with company-capf))))
 
-;; (use-package jedi
-;;   :ensure t
-;;   :defer t
-;;   :config
-;;   (add-hook 'python-mode-hook 'jedi:setup))
-
-;; (use-package elpy
-;;   :ensure t
-;;   :init
-;;   (elpy-enable)
-;;   :config
-;;   (setq elpy-rpc-python-command "python3")
-;;   (setq elpy-rpc-virtualenv-path 'current)
-;;   (setq elpy-rpc-backend "jedi"))
-
 (use-package py-isort
   :ensure t
   :after elpy
   :config
   (add-hook 'before-save-hook 'py-isort-before-save))
+
+(use-package yapfify
+  :ensure t
+  :hook (python-mode . yapf-mode)
+  :commands yapfify-buffer
+  :diminish yapf-mode)
 
 (use-package flycheck
   :ensure t
@@ -44,6 +35,14 @@
   (progn
     (add-to-list 'flycheck-checkers 'python-pylint)
     (add-to-list 'flycheck-checkers 'python-mypy)))
+
+(use-package pyvenv
+  :ensure t
+  :init
+  (setq pyvenv-default-virtual-env-name ".venv")
+  (setenv "WORKON_HOME" "~/.local/share/virtualenvs/") ;; same as pipenv default
+  :config
+  (pyvenv-mode 1))
 
 (use-package pipenv
   :ensure t

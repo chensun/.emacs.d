@@ -33,5 +33,8 @@
   (require 'spaceline-config)
   (spaceline-spacemacs-theme))
 
+(use-package diminish
+  :ensure t)
+
 (provide 'init-ui)
 ;;; init-ui.el ends here
