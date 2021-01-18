@@ -1,6 +1,5 @@
 ;;; .emacs --- Emacs initialization file -*- lexical-binding: t; -*-
 
-(package-initialize)
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 (require 'init-elpa)

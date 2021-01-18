@@ -1,10 +1,13 @@
 ;;; init-company.el
-(require-package 'company)
-
-(setq company-tooltip-limit 20)                      ; bigger popup window
-(setq company-idle-delay .3)                         ; decrease delay before autocompletion popup shows
-(setq company-echo-delay 0)                          ; remove annoying blinking
-(setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
+(use-package company
+  :ensure t
+  :diminish company-mode
+  :hook (after-init . global-company-mode)
+  :config
+  (setq company-minimum-prefix-length 1
+        company-idle-delay .3
+        company-echo-delay 0
+        company-tooltip-limit 20))
 
 (provide 'init-company)
 ;;; init-company.el ends here

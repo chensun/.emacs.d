@@ -23,11 +23,15 @@
 ;; (set-face-attribute 'default nil :height 100)
 (set-face-attribute 'default nil :font "DejaVu Sans Mono 10")
 
-;; (require-package 'monokai-theme)
-;; (load-theme 'monokai t)
+(use-package spacemacs-common
+  :ensure spacemacs-theme
+  :config (load-theme 'spacemacs-dark t))
 
-(require-package 'spacemacs-theme)
-(load-theme 'spacemacs-dark t)
+(use-package spaceline
+  :ensure t
+  :config
+  (require 'spaceline-config)
+  (spaceline-spacemacs-theme))
 
 (provide 'init-ui)
 ;;; init-ui.el ends here

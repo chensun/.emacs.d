@@ -1,11 +1,15 @@
 /.cache
 /.emacs.desktop
+/.python-environments/
 /.recentf
 /ac-comphist.dat
+/anaconda-mode
 /auto-save-list
 /bookmarks
 /elpa
+/elpy
 /eshell
+/projectile.cache
 /projectile-bookmarks.eld
 /recentf
 .recentf~
