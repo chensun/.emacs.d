@@ -1,14 +1,4 @@
 ;;; init-treemacs.el
-(require-package 'treemacs)
-(require-package 'treemacs-magit)
-(require-package 'treemacs-projectile)
-
-;; (global-set-key (kbd "M-0") 'treemacs-select-window)
-;; (global-set-key (kbd "C-x t 1") 'treemacs-delete-other-windows)
-;; (global-set-key (kbd "C-x t t") 'treemacs)
-;; (global-set-key (kbd "C-x t B") 'treemacs-bookmark)
-;; (global-set-key (kbd "C-x t C-t") 'treemacs-find-file)
-;; (global-set-key (kbd "C-x t M-t") 'treemacs-find-tag)
 
 (use-package treemacs
   :ensure t

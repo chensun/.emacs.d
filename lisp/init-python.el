@@ -23,6 +23,13 @@
   :commands yapfify-buffer
   :diminish yapf-mode)
 
+(use-package buftra
+  :straight (:host github :repo "humitos/buftra.el"))
+
+(use-package py-docformatter
+  :straight (:host github :repo "humitos/py-cmd-buffer.el")
+  :hook (python-mode . py-docformatter-enable-on-save))
+
 (use-package flycheck
   :ensure t
   :hook (python-mode . flycheck-mode)
@@ -32,7 +39,7 @@
   (flycheck-pylintrc "setup.cfg")
   :config
   (progn
-    (add-to-list 'flycheck-checkers 'python-pylint)
+    ;; (add-to-list 'flycheck-checkers 'python-pylint)
     (add-to-list 'flycheck-checkers 'python-mypy)))
 
 (use-package pyvenv
@@ -57,7 +64,7 @@
 (defun chesu-python-mode-hook ()
   (display-fill-column-indicator-mode)
   (setq fill-column 80)
-  (setq python-indent-offset 2))
+  (setq python-indent-offset 4))
 
 (add-hook 'python-mode-hook
           'chesu-python-mode-hook)

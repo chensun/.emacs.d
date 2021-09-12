@@ -1,15 +1,24 @@
 ;;; init-golang.el
-(require-package 'go-mode)
-(require-package 'go-eldoc)
-(require-package 'go-guru)
-(require-package 'go-dlv)
-(require-package 'company-go)
+(use-package go-mode
+  :ensure t)
+(use-package go-eldoc
+  :ensure t)
+(use-package go-guru
+  :ensure t)
+(use-package go-dlv
+  :ensure t)
+(use-package company-go
+  :ensure t)
+(use-package flymake-go
+  :ensure t)
 
-(require-package 'exec-path-from-shell)
-(require-package 'flymake-go)
-
-(exec-path-from-shell-initialize)
-(exec-path-from-shell-copy-env "GOPATH")
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (progn
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "PATH")
+    (exec-path-from-shell-copy-env "GOPATH")))
 
 (defun chesu-go-mode-hook ()
   (unless (string-match-p "go" compile-command)    ; set compile command default

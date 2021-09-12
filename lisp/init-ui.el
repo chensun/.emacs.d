@@ -27,10 +27,9 @@
   :ensure spacemacs-theme
   :config (load-theme 'spacemacs-dark t))
 
-(use-package spaceline
-  :ensure t
+(use-package spaceline-config
+  :ensure spaceline
   :config
-  (require 'spaceline-config)
   (spaceline-spacemacs-theme))
 
 (use-package diminish

@@ -20,13 +20,14 @@
 (setq x-select-enable-clipboard t
       x-select-enable-primary t)
 
-(require-package 'smartparens)
-(smartparens-global-mode t)
+(use-package smartparens
+  :ensure t
+  :config
+  (smartparens-global-mode))
 
-;(require-package 'popwin)
-;(popwin-mode t)
+(use-package bash-completion
+  :ensure t)
 
-(require-package 'bash-completion)
 (bash-completion-setup)
 
 (provide 'init-misc)

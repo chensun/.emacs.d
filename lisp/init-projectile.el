@@ -1,16 +1,19 @@
 ;;; init-projectile.el
-(require-package 'projectile)
-(require-package 'counsel-projectile)
+(use-package projectile
+  :ensure t
+  :config
+  (progn
+    (setq projectile-project-search-path '("~/git/"))
+    (setq projectile-completion-system 'ivy)
+    (projectile-mode))
+  :bind-keymap
+  ("C-c p" . projectile-command-map))
 
-(setq projectile-project-search-path '("~/git/"))
-(setq projectile-completion-system 'ivy)
-
-(projectile-mode)
-(counsel-projectile-mode)
-
-(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (progn
+    (counsel-projectile-mode)))
 
 (provide 'init-projectile)
 ;;; init-projectile ends here

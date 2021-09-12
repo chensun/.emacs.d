@@ -3,7 +3,8 @@
 (require 'ob-shell)
 (require 'org-tempo)
 
-(require-package 'htmlize)
+(use-package htmlize
+  :ensure t)
 
 (add-hook 'org-shiftup-final-hook 'windmove-up)
 (add-hook 'org-shiftleft-final-hook 'windmove-left)

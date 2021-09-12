@@ -17,6 +17,7 @@
 (require 'init-misc)
 (require 'init-golang)
 (require 'init-python)
+(require 'init-spell)
 ;; (require 'init-google)
 
 (setq custom-file (expand-file-name "lisp/custom.el" user-emacs-directory))

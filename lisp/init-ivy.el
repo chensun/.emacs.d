@@ -1,36 +1,34 @@
 ;;; init-ivy.el
-(require-package 'ivy)
-(require-package 'swiper)
-(require-package 'counsel)
+(use-package ivy
+  :ensure t
+  :config
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq-default ivy-count-format "[%d/%d] "))
+  :bind (("C-c C-r" . ivy-resume)
+         :map ivy-minibuffer-map
+         ("C-j" . ivy-immediate-done)
+         :map ivy-switch-buffer-map
+         ("C-j" . ivy-immediate-done)))
 
-(ivy-mode 1)
-(setq ivy-use-virtual-buffers t)
-(setq-default ivy-count-format "[%d/%d] ")
-;; (setq ivy-use-selectable-prompt t)
-;; (setq ivy-magic-slash-non-match-action nil)
+(use-package swiper
+  :ensure t
+  :after ivy
+  :bind ("C-s" . swiper))
 
-;; (define-key ivy-minibuffer-map (kbd "<tab>") 'ivy-alt-done)
-;; (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done)
-(define-key ivy-minibuffer-map (kbd "C-j") 'ivy-immediate-done)
-;; (global-set-key (kbd "C-M-j") 'ivy-immediate-done)
+(use-package counsel
+  :ensure t
+  :bind (("M-x" . counsel-M-x)
+         ("C-x b" . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file)
+         ("C-x C-r" . counsel-recentf)
+         ("C-c g" . counsel-git)
+         ("C-c j" . counsel-git-grep)
+         ("C-c k" . counsel-ag)
+         ("C-x l" . counsel-locate)
+         ("C-M-j" . counsel-switch-buffer)))
 
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
-
-(global-set-key (kbd "C-s") 'swiper)
-
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "C-x C-r") 'counsel-recentf)
-(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-(global-set-key (kbd "<f1> l") 'counsel-find-library)
-(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-
-(global-set-key (kbd "C-c g") 'counsel-git)
-(global-set-key (kbd "C-c j") 'counsel-git-grep)
-(global-set-key (kbd "C-c k") 'counsel-ag)
-(global-set-key (kbd "C-x l") 'counsel-locate)
 
 (provide 'init-ivy)
 ;;; init-ivy.el ends here

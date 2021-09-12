@@ -2,7 +2,7 @@
 (require 'recentf)
 
 (setq recentf-save-file (concat user-emacs-directory ".recentf"))
-(setq recentf-max-menu-item 20)
+(setq recentf-max-menu-item 50)
 (recentf-mode 1)
 
 ;; use counsel-recentf instead

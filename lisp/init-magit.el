@@ -1,5 +1,5 @@
 ;;; init-magit.el
-(require-package 'magit)
+(use-package magit)
 (global-set-key (kbd "C-x g") 'magit-status)
 
 (provide 'init-magit)
