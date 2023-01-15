@@ -20,7 +20,7 @@ TimeoutStartSec=0
 WantedBy=default.target
 EOF
 
-echo "Starting emacd.service"
+echo "Starting emacsd.service"
 systemctl --user enable emacsd --now
 
 echo "Creating ~/.local/share/applications/emacsclient.desktop"
