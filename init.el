@@ -6,6 +6,7 @@
 (require 'init-org)
 (require 'init-recentf)
 (require 'init-company)
+(require 'init-flycheck)
 (require 'init-magit)
 (require 'init-ace-window)
 (require 'init-projectile)
@@ -18,6 +19,7 @@
 (require 'init-golang)
 (require 'init-python)
 (require 'init-spell)
+(require 'init-solidity)
 ;; (require 'init-google)
 
 (setq custom-file (expand-file-name "lisp/custom.el" user-emacs-directory))
