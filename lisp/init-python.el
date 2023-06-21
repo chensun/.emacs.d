@@ -30,17 +30,17 @@
   :straight (:host github :repo "humitos/py-cmd-buffer.el")
   :hook (python-mode . py-docformatter-enable-on-save))
 
-(use-package flycheck
-  :ensure t
-  :hook (python-mode . flycheck-mode)
-  :custom
-  (flycheck-python-mypy-executable "mypy")
-  (flycheck-python-pylint-executable "pylint")
-  (flycheck-pylintrc "setup.cfg")
-  :config
-  (progn
-    ;; (add-to-list 'flycheck-checkers 'python-pylint)
-    (add-to-list 'flycheck-checkers 'python-mypy)))
+;; (use-package flycheck
+;;   :ensure t
+;;   :hook (python-mode . flycheck-mode)
+;;   :custom
+;;   (flycheck-python-mypy-executable "mypy")
+;;   (flycheck-python-pylint-executable "pylint")
+;;   (flycheck-pylintrc "setup.cfg")
+;;   :config
+;;   (progn
+;;     ;; (add-to-list 'flycheck-checkers 'python-pylint)
+;;     (add-to-list 'flycheck-checkers 'python-mypy)))
 
 (use-package pyvenv
   :ensure t
