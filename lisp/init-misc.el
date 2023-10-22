@@ -6,6 +6,7 @@
 (setq ring-bell-function 'ignore)
 
 (global-auto-revert-mode t)
+(setq auto-revert-use-notify nil)
 
 (delete-selection-mode t)
 

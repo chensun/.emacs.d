@@ -2,8 +2,6 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
-(global-linum-mode 1)
-
 ;; (show-paren-mode 1)
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
 
@@ -23,7 +21,7 @@
 ;; (set-face-attribute 'default nil :height 100)
 (set-face-attribute 'default nil :font "DejaVu Sans Mono 10")
 
-(use-package spacemacs-common
+(use-package spacemacs-theme
   :ensure spacemacs-theme
   :config (load-theme 'spacemacs-dark t))
 

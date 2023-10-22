@@ -6,15 +6,18 @@
 /anaconda-mode
 /auto-save-list
 /bookmarks
+/eln-cache
 /elpa
 /elpy
 /eshell
 /projectile.cache
 /projectile-bookmarks.eld
+/projects
 /recentf
 .recentf~
 /request
 /session.*
+/straight
 /transient
 /url
 # exclude Google-specific config
