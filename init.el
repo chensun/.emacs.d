@@ -22,6 +22,7 @@
 (require 'init-solidity)
 (require 'init-web)
 (require 'init-copilot)
+(require 'init-yasnippet)
 ;; (require 'init-google)
 
 (setq custom-file (expand-file-name "lisp/custom.el" user-emacs-directory))
