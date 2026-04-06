@@ -47,6 +47,12 @@
              (funcall fn)))))
 #+end_src
 
+** vterm
+
+#+begin_src emacs-lisp
+(use-package vterm)
+#+end_src
+
 * Core Settings
 
 #+begin_src emacs-lisp
@@ -547,7 +553,10 @@
 (use-package claude-code-ide
   :straight (:host github :repo "manzaltu/claude-code-ide.el")
   :bind ("C-c C-'" . claude-code-ide-menu)
+  :custom
+  (claude-code-ide-terminal-backend 'vterm)
   :config
+  (require 'vterm)
   (claude-code-ide-emacs-tools-setup))
 #+end_src
 
