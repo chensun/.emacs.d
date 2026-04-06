@@ -20,5 +20,5 @@
 /straight
 /transient
 /url
-# exclude Google-specific config
-/lisp/init-google.el
+config.el
+tramp

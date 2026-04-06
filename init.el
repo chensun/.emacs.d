@@ -1,33 +1,27 @@
-;;; .emacs --- Emacs initialization file -*- lexical-binding: t; -*-
+;;; init.el --- Emacs initialization file -*- lexical-binding: t; -*-
 
-(add-to-list 'load-path "~/.emacs.d/lisp/")
+;; Disable package.el — straight.el manages all packages.
+(setq package-enable-at-startup nil)
 
-(require 'init-elpa)
-(require 'init-org)
-(require 'init-recentf)
-(require 'init-company)
-(require 'init-flycheck)
-(require 'init-magit)
-(require 'init-ace-window)
-(require 'init-projectile)
-(require 'init-treemacs)
-(require 'init-ivy)
-(require 'init-ui)
-(require 'init-keybindings)
-(require 'init-multiple-cursors)
-(require 'init-misc)
-(require 'init-golang)
-(require 'init-python)
-(require 'init-spell)
-(require 'init-solidity)
-(require 'init-web)
-(require 'init-copilot)
-(require 'init-yasnippet)
-;; (require 'init-google)
+;; Bootstrap straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(setq custom-file (expand-file-name "lisp/custom.el" user-emacs-directory))
-(load-file custom-file)
+(straight-use-package 'use-package)
+;; Every use-package form will call straight by default; use :straight nil for builtins.
+(setq straight-use-package-by-default t)
 
-(server-start)
+;; Load the org-mode configuration file.
+(org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
 
 ;;; init.el ends here

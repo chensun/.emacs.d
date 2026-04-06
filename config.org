@@ -1,0 +1,558 @@
+#+TITLE: Emacs Configuration
+#+AUTHOR: Chen Sun
+#+PROPERTY: header-args:emacs-lisp :lexical t
+
+* UI & Appearance
+** Basic chrome
+
+#+begin_src emacs-lisp
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(setq inhibit-splash-screen t)
+(setq initial-frame-alist '((fullscreen . maximized)))
+(setq-default cursor-type 'bar)
+(global-display-line-numbers-mode t)
+#+end_src
+
+** Font
+
+#+begin_src emacs-lisp
+(set-face-attribute 'default nil :font "DejaVu Sans Mono 10")
+#+end_src
+
+** Theme & modeline
+
+#+begin_src emacs-lisp
+(use-package spacemacs-theme
+  :config (load-theme 'spacemacs-dark t))
+
+(use-package spaceline
+  :config
+  (require 'spaceline-config)
+  (spaceline-spacemacs-theme))
+
+(use-package diminish)
+#+end_src
+
+** Show paren
+
+#+begin_src emacs-lisp
+(add-hook 'emacs-lisp-mode-hook #'show-paren-mode)
+
+(define-advice show-paren-function (:around (fn) fix-show-paren-function)
+  "Highlight enclosing parens."
+  (cond ((looking-at-p "\\s(") (funcall fn))
+        (t (save-excursion
+             (ignore-errors (backward-up-list))
+             (funcall fn)))))
+#+end_src
+
+* Core Settings
+
+#+begin_src emacs-lisp
+(setenv "BASH_ENV" (expand-file-name "~/.bashrc"))
+(setq-default indent-tabs-mode nil)
+(setq markdown-command      "pandoc"
+      ring-bell-function    'ignore
+      auto-save-default     nil
+      make-backup-files     nil
+      enable-recursive-minibuffers t
+      use-short-answers     t        ; y/n instead of yes/no
+      x-select-enable-clipboard t
+      x-select-enable-primary    t)
+
+(global-auto-revert-mode t)
+(setq auto-revert-use-notify nil)
+(delete-selection-mode t)
+
+(setq custom-file (expand-file-name "lisp/custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+#+end_src
+
+** Recent files
+
+#+begin_src emacs-lisp
+(use-package recentf
+  :straight nil
+  :custom
+  (recentf-save-file (expand-file-name ".recentf" user-emacs-directory))
+  (recentf-max-menu-items 50)
+  :config
+  (recentf-mode 1))
+#+end_src
+
+* Minibuffer Completion
+
+** Ivy / Counsel / Swiper
+
+#+begin_src emacs-lisp
+(use-package ivy
+  :diminish ivy-mode
+  :custom
+  (ivy-use-virtual-buffers t)
+  (ivy-count-format "[%d/%d] ")
+  :bind (("C-c C-r" . ivy-resume)
+         :map ivy-minibuffer-map
+         ("C-j" . ivy-immediate-done)
+         :map ivy-switch-buffer-map
+         ("C-j" . ivy-immediate-done))
+  :config
+  (ivy-mode 1))
+
+(use-package swiper
+  :after ivy
+  :bind ("C-s" . swiper))
+
+(use-package counsel
+  :bind (("M-x"     . counsel-M-x)
+         ("C-x b"   . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file)
+         ("C-x C-r" . counsel-recentf)
+         ("C-c g"   . counsel-git)
+         ("C-c j"   . counsel-git-grep)
+         ("C-c k"   . counsel-ag)
+         ("C-x l"   . counsel-locate)
+         ("C-M-j"   . counsel-switch-buffer)))
+#+end_src
+
+* Window Management
+
+#+begin_src emacs-lisp
+(use-package ace-window
+  :bind ("M-o" . ace-window)
+  :custom
+  (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+#+end_src
+
+* Project Management
+
+#+begin_src emacs-lisp
+(use-package projectile
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :custom
+  (projectile-project-search-path '("~/git/"))
+  (projectile-completion-system 'ivy)
+  :config
+  (projectile-mode))
+
+(use-package counsel-projectile
+  :after projectile
+  :config
+  (counsel-projectile-mode))
+#+end_src
+
+* File Tree
+
+#+begin_src emacs-lisp
+(use-package treemacs
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :custom
+  (treemacs-deferred-git-apply-delay      0.5)
+  (treemacs-directory-name-transformer    #'identity)
+  (treemacs-display-in-side-window        t)
+  (treemacs-file-event-delay              5000)
+  (treemacs-file-follow-delay             0.2)
+  (treemacs-file-name-transformer         #'identity)
+  (treemacs-follow-after-init             t)
+  (treemacs-git-command-pipe              "")
+  (treemacs-goto-tag-strategy             'refetch-index)
+  (treemacs-indentation                   2)
+  (treemacs-indentation-string            " ")
+  (treemacs-is-never-other-window         nil)
+  (treemacs-max-git-entries               5000)
+  (treemacs-missing-project-action        'ask)
+  (treemacs-no-png-images                 nil)
+  (treemacs-no-delete-other-windows       t)
+  (treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory))
+  (treemacs-position                      'left)
+  (treemacs-recenter-distance             0.1)
+  (treemacs-recenter-after-file-follow    nil)
+  (treemacs-recenter-after-tag-follow     nil)
+  (treemacs-recenter-after-project-jump   'always)
+  (treemacs-recenter-after-project-expand 'on-distance)
+  (treemacs-show-cursor                   nil)
+  (treemacs-show-hidden-files             t)
+  (treemacs-silent-filewatch              nil)
+  (treemacs-silent-refresh                nil)
+  (treemacs-sorting                       'alphabetic-asc)
+  (treemacs-space-between-root-nodes      t)
+  (treemacs-tag-follow-cleanup            t)
+  (treemacs-tag-follow-delay              1.5)
+  (treemacs-width                         35)
+  :config
+  (setq treemacs-collapse-dirs (if treemacs-python-executable 3 0))
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (treemacs-fringe-indicator-mode t)
+  (pcase (cons (not (null (executable-find "git")))
+               (not (null treemacs-python-executable)))
+    (`(t . t) (treemacs-git-mode 'deferred))
+    (`(t . _) (treemacs-git-mode 'simple)))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+
+(use-package treemacs-projectile
+  :after (treemacs projectile))
+
+(use-package treemacs-icons-dired
+  :after (treemacs dired)
+  :config (treemacs-icons-dired-mode))
+
+(use-package treemacs-magit
+  :after (treemacs magit))
+#+end_src
+
+* Version Control
+
+#+begin_src emacs-lisp
+(use-package magit
+  :bind ("C-x g" . magit-status))
+#+end_src
+
+* Editing Enhancements
+** Smartparens
+
+#+begin_src emacs-lisp
+(use-package smartparens
+  :config (smartparens-global-mode))
+#+end_src
+
+** Multiple cursors
+
+#+begin_src emacs-lisp
+(use-package multiple-cursors
+  :bind ("C-c m c" . mc/edit-lines))
+#+end_src
+
+** iedit
+
+#+begin_src emacs-lisp
+(use-package iedit
+  :bind ("M-s e" . iedit-mode))
+#+end_src
+
+** Snippets
+
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :custom
+  (yas-snippet-dirs `(,(expand-file-name "snippets" user-emacs-directory)))
+  :config
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :straight (:host github :repo "AndreaCrotti/yasnippet-snippets")
+  :after yasnippet)
+#+end_src
+
+** Bash completion
+
+#+begin_src emacs-lisp
+(use-package bash-completion
+  :config (bash-completion-setup))
+#+end_src
+
+* Syntax Checking
+
+#+begin_src emacs-lisp
+(use-package flycheck
+  :init (global-flycheck-mode))
+#+end_src
+
+* Auto-Completion
+
+#+begin_src emacs-lisp
+(use-package company
+  :diminish company-mode
+  :hook (after-init . global-company-mode)
+  :custom
+  (company-minimum-prefix-length 2)
+  (company-idle-delay 0.3)
+  (company-echo-delay 0)
+  (company-tooltip-align-annotations t)
+  (company-tooltip-limit 20))
+#+end_src
+
+* Spell Checking
+
+#+begin_src emacs-lisp
+(use-package flyspell
+  :straight nil
+  :diminish flyspell-mode
+  :if (executable-find "aspell")
+  :hook ((text-mode . flyspell-mode)
+         (prog-mode . flyspell-prog-mode))
+  :custom
+  (flyspell-issue-message-flag nil)
+  (ispell-program-name "aspell")
+  (ispell-extra-args '("--sug-mode=ultra" "--lang=en_US" "--run-together")))
+
+(use-package flyspell-correct-ivy
+  :after flyspell
+  :custom
+  (flyspell-correct-interface #'flyspell-correct-ivy))
+#+end_src
+
+* Keybindings
+
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-h C-f") #'find-function)
+(global-set-key (kbd "C-h C-v") #'find-variable)
+(global-set-key (kbd "C-h C-k") #'find-function-on-key)
+
+(windmove-default-keybindings)
+#+end_src
+
+* Org Mode
+
+#+begin_src emacs-lisp
+(use-package org
+  :straight nil
+  :bind (("C-c a" . org-agenda)
+         ("C-c r" . org-capture))
+  :custom
+  (org-log-done 'time)
+  (org-support-shift-select 'always)
+  (org-catch-invisible-edits 'show-and-error)
+  (org-src-fontify-natively t)
+  (org-agenda-files '("~/DriveFS/My Drive/org/"))
+  (org-capture-templates
+   '(("t" "Todo" entry (file+headline "~/DriveFS/My Drive/org/tasks.org" "Tasks")
+      "* TODO %?\n  %i\n"
+      :empty-lines 1)))
+  (org-todo-keywords
+   '((sequence "TODO" "IN PROGRESS" "BLOCKED" "|" "DONE")))
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((shell  . t)
+     (python . t)
+     (sql    . t)))
+  (add-hook 'org-shiftup-final-hook    #'windmove-up)
+  (add-hook 'org-shiftleft-final-hook  #'windmove-left)
+  (add-hook 'org-shiftdown-final-hook  #'windmove-down)
+  (add-hook 'org-shiftright-final-hook #'windmove-right))
+
+(use-package org-tempo
+  :straight nil
+  :after org
+  :config
+  (add-to-list 'org-structure-template-alist
+               '("py" . "src python :results output :session")))
+
+(use-package ob-shell
+  :straight nil)
+
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "►" "✸" "✜" "★")))
+
+(use-package htmlize)
+#+end_src
+
+* Programming Languages
+** Go
+
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "GOPATH"))
+
+(use-package go-mode)
+(use-package go-eldoc)
+(use-package go-guru)
+(use-package go-dlv)
+(use-package company-go)
+(use-package flymake-go)
+
+(defun my/go-mode-setup ()
+  "Configure go-mode."
+  (unless (string-match-p "go" compile-command)
+    (set (make-local-variable 'compile-command)
+         "go build -v && go test -v && go vet"))
+  (go-eldoc-setup)
+  (go-guru-hl-identifier-mode)
+  (setq gofmt-command "goimports"
+        tab-width 4)
+  (set (make-local-variable 'company-backends) '(company-go))
+  (local-set-key (kbd "M-.") #'godef-jump)
+  (local-set-key (kbd "M-*") #'pop-tag-mark)
+  (local-set-key (kbd "M-p") #'compile)
+  (local-set-key (kbd "M-P") #'recompile)
+  (local-set-key (kbd "M-]") #'next-error)
+  (local-set-key (kbd "M-[") #'previous-error)
+  (add-hook 'before-save-hook #'gofmt-before-save nil t))
+
+(add-hook 'go-mode-hook #'my/go-mode-setup)
+#+end_src
+
+** Python
+
+#+begin_src emacs-lisp
+(use-package anaconda-mode
+  :defer t
+  :hook ((python-mode . anaconda-mode)
+         (python-mode . anaconda-eldoc-mode)))
+
+(use-package company-anaconda
+  :after company
+  :config
+  (add-to-list 'company-backends '(company-anaconda :with company-capf)))
+
+(use-package py-isort
+  :config
+  (add-hook 'before-save-hook #'py-isort-before-save))
+
+(use-package yapfify
+  :diminish yapf-mode
+  :hook (python-mode . yapf-mode))
+
+(use-package buftra
+  :straight (:host github :repo "humitos/buftra.el"))
+
+(use-package py-docformatter
+  :straight (:host github :repo "humitos/py-cmd-buffer.el")
+  :hook (python-mode . py-docformatter-enable-on-save))
+
+(use-package pyvenv
+  :custom
+  (pyvenv-default-virtual-env-name ".venv")
+  :init
+  (setenv "WORKON_HOME" "~/venv")
+  :config
+  (pyvenv-mode 1))
+
+(use-package pipenv
+  :hook (python-mode . pipenv-mode)
+  :custom
+  (pipenv-projectile-after-switch-function
+   #'pipenv-projectile-after-switch-extended))
+
+(use-package ein)
+
+(defun my/python-mode-setup ()
+  "Configure python-mode."
+  (display-fill-column-indicator-mode)
+  (setq fill-column 80
+        python-indent-offset 4))
+
+(add-hook 'python-mode-hook #'my/python-mode-setup)
+#+end_src
+
+** Web (JavaScript / TypeScript)
+
+#+begin_src emacs-lisp
+(use-package web-mode
+  :custom
+  (web-mode-code-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-markup-indent-offset 2))
+
+(use-package rjsx-mode
+  :mode "\\.jsx?$"
+  :custom
+  (js-indent-level 2)
+  (js2-strict-missing-semi-warning nil))
+
+(use-package typescript-mode
+  :mode ("\\.ts\\'" "\\.tsx\\'")
+  :custom
+  (typescript-indent-level 2))
+
+(use-package tide
+  :after (company flycheck)
+  :preface
+  (defun my/setup-tide ()
+    "Configure tide for TypeScript/JavaScript."
+    (interactive)
+    (tide-setup)
+    (flycheck-mode +1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    (company-mode +1))
+  :hook ((js-mode         . my/setup-tide)
+         (rjsx-mode       . my/setup-tide)
+         (typescript-mode . my/setup-tide)
+         (web-mode        . my/setup-tide)))
+
+(use-package prettier-js
+  :defer t
+  :custom
+  (prettier-js-args '("--print-width"      "100"
+                      "--single-quote"     "true"
+                      "--jsx-single-quote" "true"
+                      "--bracket-spacing"  "true"
+                      "--arrow-parens"     "avoid"
+                      "--trailing-comma"   "all"))
+  :hook ((js-mode         . prettier-js-mode)
+         (js2-mode        . prettier-js-mode)
+         (rjsx-mode       . prettier-js-mode)
+         (typescript-mode . prettier-js-mode)
+         (web-mode        . prettier-js-mode)))
+#+end_src
+
+** Solidity
+
+#+begin_src emacs-lisp
+(use-package solidity-mode
+  :defer t
+  :custom
+  (solidity-solc-path    "/usr/bin/solc")
+  (solidity-solium-path  "/home/chen/.nvm/versions/node/v18.13.0/bin/solium")
+  (solidity-solhint-path "/home/chen/.nvm/versions/node/v18.13.0/bin/solhint")
+  (solidity-comment-style 'slash))
+
+(use-package solidity-flycheck
+  :after solidity-mode
+  :custom
+  (solidity-flycheck-chaining-error-level t)
+  (solidity-flycheck-use-project t))
+
+(use-package company-solidity
+  :after solidity-mode
+  :config
+  (add-to-list 'company-backends '(company-solidity :with company-capf)))
+#+end_src
+
+* AI Assistance
+** GitHub Copilot
+
+#+begin_src emacs-lisp
+(use-package copilot
+  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("TAB"     . copilot-accept-completion)
+              ("<tab>"   . copilot-accept-completion)
+              ("C-TAB"   . copilot-accept-completion-by-word)
+              ("C-<tab>" . copilot-accept-completion-by-word)))
+#+end_src
+
+** Claude Code IDE
+
+#+begin_src emacs-lisp
+(use-package claude-code-ide
+  :straight (:host github :repo "manzaltu/claude-code-ide.el")
+  :bind ("C-c C-'" . claude-code-ide-menu)
+  :config
+  (claude-code-ide-emacs-tools-setup))
+#+end_src
+
+* Server
+
+#+begin_src emacs-lisp
+(server-start)
+#+end_src
