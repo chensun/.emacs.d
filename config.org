@@ -47,10 +47,15 @@
              (funcall fn)))))
 #+end_src
 
-** vterm
+** eat
 
 #+begin_src emacs-lisp
-(use-package vterm)
+(use-package eat
+  :config
+  ;; Add M-o to the list of keys handled by Emacs instead of the terminal
+  (add-to-list 'eat-semi-char-non-bound-keys [?\e ?o])
+  ;; Update the keymap to apply the change immediately
+  (eat-update-semi-char-mode-map))
 #+end_src
 
 * Core Settings
@@ -554,9 +559,9 @@
   :straight (:host github :repo "manzaltu/claude-code-ide.el")
   :bind ("C-c C-'" . claude-code-ide-menu)
   :custom
-  (claude-code-ide-terminal-backend 'vterm)
+  (claude-code-ide-terminal-backend 'eat)
   :config
-  (require 'vterm)
+  (require 'eat)
   (claude-code-ide-emacs-tools-setup))
 #+end_src
 
