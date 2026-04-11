@@ -409,6 +409,39 @@
 (add-hook 'go-mode-hook #'my/go-mode-setup)
 #+end_src
 
+** Rust
+
+#+begin_src emacs-lisp
+(use-package rust-mode
+  :mode "\\.rs\\'"
+  :custom
+  (rust-format-on-save t))
+
+(use-package cargo
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package toml-mode
+  :mode "\\.toml\\'")
+
+(use-package eglot
+  :straight nil
+  :hook (rust-mode . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs
+               '(rust-mode . ("rust-analyzer"))))
+
+(defun my/rust-mode-setup ()
+  "Configure rust-mode."
+  (setq-local compile-command "cargo build")
+  (local-set-key (kbd "M-p") #'compile)
+  (local-set-key (kbd "M-P") #'recompile)
+  (local-set-key (kbd "C-c C-r") #'cargo-process-run)
+  (local-set-key (kbd "C-c C-t") #'cargo-process-test)
+  (local-set-key (kbd "C-c C-c") #'cargo-process-build))
+
+(add-hook 'rust-mode-hook #'my/rust-mode-setup)
+#+end_src
+
 ** Python
 
 #+begin_src emacs-lisp
