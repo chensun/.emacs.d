@@ -572,17 +572,19 @@
 #+end_src
 
 * AI Assistance
-** GitHub Copilot
+** Editor Code Assistant (ECA)
 
 #+begin_src emacs-lisp
-(use-package copilot
-  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
-  :hook (prog-mode . copilot-mode)
-  :bind (:map copilot-completion-map
-              ("TAB"     . copilot-accept-completion)
-              ("<tab>"   . copilot-accept-completion)
-              ("C-TAB"   . copilot-accept-completion-by-word)
-              ("C-<tab>" . copilot-accept-completion-by-word)))
+(use-package eca
+  :straight (:type git :host github :repo "editor-code-assistant/eca-emacs")
+  :bind (("C-c e" . eca)
+         ("C-c E" . eca-chat-toggle-window))
+  :custom
+  (eca-chat-window-side 'right)
+  (eca-chat-window-width 0.35)
+  :config
+  ;; Enable inline AI completion in programming buffers.
+  (add-hook 'prog-mode-hook #'eca-completion-mode))
 #+end_src
 
 ** Claude Code IDE
