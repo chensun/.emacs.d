@@ -292,6 +292,11 @@
   (company-echo-delay 0)
   (company-tooltip-align-annotations t)
   (company-tooltip-limit 20))
+
+(use-package eldoc-box
+  :hook (eglot-managed-mode . eldoc-box-hover-at-point-mode)
+  :custom
+  (eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly))
 #+end_src
 
 * Spell Checking
@@ -493,6 +498,12 @@
         python-indent-offset 4))
 
 (add-hook 'python-mode-hook #'my/python-mode-setup)
+
+;; Use eglot + pyright for richer completions and signatures
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(python-mode . ("pyright-langserver" "--stdio"))))
+(add-hook 'python-mode-hook #'eglot-ensure)
 #+end_src
 
 ** Web (JavaScript / TypeScript)
